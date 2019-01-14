@@ -6,10 +6,9 @@ module Exercise
 
       # Написать свою функцию my_each
       def my_each(*)
-        
-        #for i in self
-        #  yield(i) if block_given?
-        #end
+        for i in self
+          yield(i) if block_given?
+        end
       end
 
       # Написать свою функцию my_map
@@ -34,7 +33,7 @@ module Exercise
         return nil if self.empty?
         acc = init.nil? ? self.first : init
         tail = init.nil? ? self.drop(1) : self
-        for i in tail
+        tail.my_each do |i|
           acc = yield(acc, i) if block_given?
         end
         acc
