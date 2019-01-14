@@ -6,25 +6,25 @@ module Exercise
 
       # Написать свою функцию my_each
       def my_each(*)
-        for i in self
-          yield(i) if block_given?
-        end
+        
+        #for i in self
+        #  yield(i) if block_given?
+        #end
       end
 
       # Написать свою функцию my_map
       def my_map(*)
-        result = []
-        for i in self
-          result << yield(i) if block_given?
+        result = self.my_reduce([]) do |acc, i|
+          acc << yield(i)
         end
         self.class.new(result)
       end
 
       # Написать свою функцию my_compact
       def my_compact
-        result = []
-        for i in self
-          result << i unless i.nil?
+        result = self.my_reduce([]) do |acc, i|
+          acc << i unless i.nil?
+          acc
         end
         self.class.new(result)
       end
