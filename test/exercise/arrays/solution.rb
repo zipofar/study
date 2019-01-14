@@ -28,16 +28,13 @@ module Exercise
         return -1
       end
 
-      def quickSort(array)
-        return array if array.length < 2
-        pivot = array[0]
-        less = array.select { |i| i < pivot }
-        greater = array.select { |i| i > pivot }
-        return quickSort(less) + [pivot] + quickSort(greater)
-      end
-
       def findMax(array)
-        quickSort(array)[-1]
+        return nil if array.empty?
+        max = array[0]
+        for i in array
+          max = i if i > max
+        end
+        max
       end
     end
   end
