@@ -2,33 +2,42 @@ module Exercise
   module Arrays
     class << self
       def replace(array)
-        max = array.max
+        max = findMax(array)
         array.map { |i| i < max && i >= 0 ? max : i }
       end
-
+ 
       def search(array, query)
-        first_index = 0
-        last_index = array.length - 1
+        return -1 if array.empty?
+        left_index = 0
+        right_index = array.length - 1
+        mid_index = right_index / 2
 
-        loop do
-          left_last_index = last_index / 2
-          right_last_index = last_index
+        while left_index <= right_index do
+          guess = array[mid_index]
+          return mid_index if query == guess
 
-          return left_last_index if query == array[left_last_index]
-          return right_last_index if query == array[right_last_index]
-          return -1 if stay_max_two_items(right_last_index, left_last_index)
-
-          if query > array[left_last_index]
-            first_index = left_last_index + 1
-            last_index -= 1
-          elsif query < array[left_last_index]
-            last_index = left_last_index - 1
+          if query > guess
+            left_index = mid_index + 1
+          elsif query < guess
+            right_index = mid_index - 1
           end
+
+          mid_index = (right_index + left_index) / 2
         end
+
+        return -1
       end
 
-      def stay_max_two_items(n1, n2)
-        (n1 - n2).abs < 2
+      def quickSort(array)
+        return array if array.length < 2
+        pivot = array[0]
+        less = array.select { |i| i < pivot }
+        greater = array.select { |i| i > pivot }
+        return quickSort(less) + [pivot] + quickSort(greater)
+      end
+
+      def findMax(array)
+        quickSort(array)[-1]
       end
     end
   end
