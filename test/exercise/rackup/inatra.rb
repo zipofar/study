@@ -1,27 +1,22 @@
 module Inatra
   class << self
-    @@routes = []
-    def routes
-      yield
+    def routes(&block)
+      @routes = []
+      instance_eval(&block)
     end
 
-    def get(path, &block)
-      @@routes << { path: path, block: block }
+    def method_missing(method, *args, &block)
+      path = args.first
+      @routes << { method: method.upcase.to_s, path: path, block: block }
     end
 
     def call(env)
+      method = env['REQUEST_METHOD'].upcase
       path = env['PATH_INFO']
-      @@routes.each { |route| return route[:block].call if path == route[:path] }
-    end
-  end
-  module Delegator
-    def self.delegate
-      define_method('get') do |path, &block|
-        return Inatra.get(path, &block)
+      @routes.each do |route| 
+        return route[:block].call if path == route[:path] && method == route[:method]
       end
     end
-    delegate
   end
 end
 
-extend Inatra::Delegator
