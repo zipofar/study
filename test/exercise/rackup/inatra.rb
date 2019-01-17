@@ -13,10 +13,9 @@ module Inatra
     def call(env)
       method = env['REQUEST_METHOD'].upcase
       path = env['PATH_INFO']
-      @routes.each do |route| 
+      @routes.each do |route|
         return route[:block].call if path == route[:path] && method == route[:method]
       end
     end
   end
 end
-
